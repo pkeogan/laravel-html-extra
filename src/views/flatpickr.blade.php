@@ -30,7 +30,7 @@
     $attributes['class'] = 'form-control';
     $attributes['id'] = $id;
     $attributes['data-input'] = 'data-input';
-    $attributes['autocomplete'] = 'off';
+     if(!isset($attributes['autocomplete'])){ $attributes['autocomplete'] = 'off';}
 
       $dateFormat = '';
       if(isset($data['noCalendar']) && ! $data['noCalendar']){

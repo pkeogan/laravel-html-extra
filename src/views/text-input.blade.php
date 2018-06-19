@@ -21,16 +21,32 @@
 
 
 @php 
-	if(isset($data['type'])){$type= $data['type'];}
-    if(isset($attributes) && (in_array('required' ,$attributes) || in_array('Required' ,$attributes))){ $label = $name.' *'; }else{ $label = $name; } //Set $label Var to $name, if 'required' was passed, add a * to the end of the label name
-    if(isset($attributes['value'])){ $value = $attributes['value']; }else{ $value = null; } //if the value was passed, use it, if not null it
-    if($attributes == null){$attributes = [];} //if attributes is null, because it wasnts passed, setup so we can atleast add the class
-    if(!isset($attributes['placeholder']))
-    {
-        $attributes['placeholder'] = 'Enter ' . $name;
-    } 
+//Set the data type
+if(isset($data['type'])){$type= $data['type'];}
 
-$attributes = array_merge(['class' => 'form-control'], $attributes); // add the class 'form-control'
+//Set $label Var to $name, if 'required' was passed, add a * to the end of the label name
+if(isset($attributes) && (in_array('required' ,$attributes) || in_array('Required' ,$attributes))){ $label = $name.' *'; }else{ $label = $name; } 
+   
+ //if the value was not passed,null it
+if(!isset($value)){ $value = null; }
+
+//Turn off autocomplete if it is not set.
+if(!isset($attributes['autocomplete'])){ $attributes['autocomplete'] = 'off';}
+
+//If placeholder was not passed, set it to Enter + $name
+if(!isset($attributes['placeholder']))
+{
+	$attributes['placeholder'] = 'Enter ' . $name;
+} 
+
+//If array-input is set, add a [] to the end of the name attribue
+if(isset($data['arrayInput']) && $data['arrayInput'])
+{
+	$attributes['name'] = $id . '[]';
+} 
+
+// add the class 'form-control'
+$attributes['class'] = 'form-control';
 
 @endphp
 

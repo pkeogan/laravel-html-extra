@@ -20,16 +20,28 @@
 
 @php 
 
+//OLD CODE?
+//if attributes is null, because it was not passed, setup so we can atleast add the class
+//if($attributes == null){$attributes = [];}
 
-if(isset($attributes['required'])){ $label = $name.' *'; }else{ $label = $name; } //Set $label Var, if required was passed, add a * to the end of the label name
-if(isset($attributes['value'])){ $value = $attributes['value']; }else{ $value = null; } //if the value was passed, use it, if not null it
-if($attributes == null){$attributes = [];} //if attributes is null, because it wasnts passed, setup so we can atleast add the class
+//Set $label Var, if required was passed, add a * to the end of the label name
+if(isset($attributes['required'])){ $label = $name.' *'; }else{ $label = $name; } 
+
+//if the value was passed, use it, if not null it
+if(isset($attributes['value'])){ $value = $attributes['value']; }else{ $value = null; } 
+
+//Turn off autocomplete if it is not set.
+if(!isset($attributes['autocomplete'])){ $attributes['autocomplete'] = 'off';}
+
+//If no placeholer is set, set it to Enter + $name
 if(!isset($attributes['placeholder']))
 {
     $attributes['placeholder'] = 'Enter ' . $name;
 } 
 
-$attributes = array_merge(['class' => 'form-control'], $attributes); // add the class 'form-control'
+//add class form control
+$attributes['class'] = 'form-control';
+
 
 @endphp
 <div id="{{ $id }}_group" class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
