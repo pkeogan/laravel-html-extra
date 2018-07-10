@@ -1,0 +1,31 @@
+{
+  "name": "pkeogan/laravel-html-extra",
+  "description": "A Laravel 5.5 Package that expands LaravelCollective/html further with different js plugins.",
+  "keywords": [
+    "laravel",
+    "AdminLTE",
+    "Blade"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Peter Keogan",
+      "email": "peter@pkeogan.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "laravelcollective/html":"^5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pkeogan\\LaravelHtmlExtra\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "master": "0.1-dev"
+    }
+  },
+  "minimum-stability": "dev"
+}
