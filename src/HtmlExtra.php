@@ -219,6 +219,12 @@ public function time()
     $this->type = 'slider';
     return $this;
   }
+	
+  public function summernote()
+  {
+    $this->type = 'summernote';
+    return $this;
+  }
   
   public function select()
   {

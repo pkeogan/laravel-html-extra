@@ -26,7 +26,7 @@
 
 <div class="form-group">
 <label>{{ $name }}</label>
-{{ Form::textarea($name,
+{{ Form::textarea($id,
                   null,
                   array_merge(['id' => $id, 'class' => 'form-control'], $attributes)) }}
     
