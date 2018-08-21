@@ -18,16 +18,25 @@
   -- |  Usage: See Readme.md
   --}}
 @pushonce('styles:summernote')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" integrity="sha256-1uHhBaI19Fpk6DF4OY0VVh3TdrDba1fJ4HpiW5fuVH0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote.css" integrity="sha256-3en7oGyoTD7A1GPFbWeqdIGvDlNWU5+4oWgJQE2dnQs=" crossorigin="anonymous" />
 @endpushonce
 @pushonce('scripts:summernote')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.min.js" integrity="sha256-XQ00qNI8haIYWjFizD+WhH3ZGg1y3ik1rp2Aneo2dfk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote.js" integrity="sha256-9tvAQTHltclSRZubN4xerdlqLhVmxj/Z311rAkOzXd0=" crossorigin="anonymous"></script>
 @endpushonce
+
+@php
+if(!isset($data)){
+$data = config('laravel-html-extra.summernote');
+} else {
+$data = array_merge($data, config('laravel-html-extra.summernote'));
+}
+@endphp
+
 
 <div class="form-group">
 <label>{{ $name }}</label>
 {{ Form::textarea($id,
-                  null,
+                  $value,
                   array_merge(['id' => $id, 'class' => 'form-control'], $attributes)) }}
     
 <p class="help-block">{{ $helper_text }}</p>
@@ -35,9 +44,9 @@
   @push('after-scripts')
     <script type="text/javascript">
     $(document).ready(function() {
-        $('#{{ $id }}').summernote({
-            @if(array_key_exists('height', $attributes)) height:"{{$attributes['height']}}" @endif
-        });
+        $('#{{ $id }}').summernote(
+			{!! json_encode($data) !!}
+        );
     });
     </script>
 @endpush

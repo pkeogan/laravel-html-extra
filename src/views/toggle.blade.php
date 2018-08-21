@@ -33,6 +33,7 @@
    <p class="help-block">{{ $helper_text  }}</p>
 </div>
   
+@php if($value == null){$value = '0';} @endphp
   
  {{ Form::hidden($id, $value, ['id' => $id]) }}
 

@@ -179,6 +179,12 @@ class HtmlExtra
   {
     return $this;
   }
+	
+	  public function pdf()
+  {
+    $this->type = 'pdf';
+    return $this;
+  }
   
   public function toggle()
   {
@@ -211,6 +217,12 @@ public function time()
   public function nestable()
   {
     $this->type = 'nestable';
+    return $this;
+  }
+	
+  public function dropzone()
+  {
+    $this->type = 'dropzone';
     return $this;
   }
     
