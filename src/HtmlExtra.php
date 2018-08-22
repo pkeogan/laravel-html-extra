@@ -51,7 +51,9 @@ class HtmlExtra
       
       $this->types = ['box', 'label', 'text', 'password', 'email', 'hidden', 'textarea', 'date', 'time', 'dateTime', 'toggle', 'select', 'mulitple', 'slider', 'summernote', 'cropper']; 
       $this->singleAttributes = ['required', 'disabled', 'checked', 'autofocus', 'multiple', 'readonly'];
+    	  $this->booleanVars = ['removeLabel', 'inputOnly', 'removeFormGroup'];
     }
+
   
   public function __call($name, $value)
     {
@@ -121,6 +123,8 @@ class HtmlExtra
 			  } else {
 				  $this->data['attributes'] =  array_merge($this->data['attributes'], [$value]);
 			  }
+        } elseif(in_array($value, $this->booleanVars)){ //Single Attributes
+				  $this->data[$value] = true;
         } elseif(in_array($value, $this->types)){ //for build()->text type methods
            $this->{$value}();
         }
@@ -146,11 +150,27 @@ class HtmlExtra
     $this->data['type'] = 'text';
     return $this;
   }
+	
+	  
+  public function phone()
+  {
+    $this->type = 'text-input';
+    $this->data['type'] = 'text';
+	$this->data['attributes']['data-mask'] = "(###) ###-####";
+    return $this;
+  }
   
   public function password()
   {
     $this->type = 'text-input';
     $this->data['type'] = 'password';
+    return $this;
+  }
+	
+  	public function passwordConfirm()
+	{
+    $this->type = 'text-input';
+    $this->data['type'] = 'passwordConfirm';
     return $this;
   }
   
@@ -220,9 +240,21 @@ public function time()
     return $this;
   }
 	
+  public function pwstrength()
+  {
+    $this->type = 'pwstrength';
+    return $this;
+  }
+		
   public function dropzone()
   {
     $this->type = 'dropzone';
+    return $this;
+  }
+
+  public function mask(String $input)
+  {
+    $this->data['attributes']['data-mask'] = $input;
     return $this;
   }
     
