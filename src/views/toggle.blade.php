@@ -30,7 +30,7 @@
  <label for="middle_name" class="control-label">{{ $name }}</label>
 @if(isset($attributes) && array_key_exists('placeholder', $attributes)) @if($attributes['placeholder'] != null ) placeholder: "{{ $attributes['placeholder'] }}", @endif @endif
 <div class="label-control"> {{ Form::checkbox( $id, 'true', $value, ['id' => 'toggle-'.$id ]) }}  </div>
-   <p class="help-block">{{ $helper_text  }}</p>
+   <p class="help-block">{!! $helper_text  !!}</p>
 </div>
   
 @php if($value == null){$value = '0';} @endphp
