@@ -23,9 +23,7 @@
 @pushonce('scripts:flatpickr')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.0/flatpickr.min.js" integrity="sha256-wBDnPvmVBO049qOV/XacwBYYE0wgsok0tEcD+nwC4Kk=" crossorigin="anonymous"></script>
 @endpushonce
-@pushonce('scripts:mask')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js" integrity="sha256-u7MY6EG5ass8JhTuxBek18r5YG6pllB9zLqE4vZyTn4=" crossorigin="anonymous"></script>
-@endpushonce
+
 
 @php 
     if(isset($attributes['value'])){ $value = $attributes['value']; }else{ $value = null; } //if the value was passed, use it, if not null it
@@ -38,9 +36,13 @@
       $dateFormat = '';
 	  $maskFormat = '';
       if(isset($data['noCalendar']) && ! $data['noCalendar']){
-        $dateFormat .= 'm-d-Y ';
-        $maskFormat .= '00-00-0000 ';
+        $dateFormat .= 'm-d-Y';
+        $maskFormat .= '00-00-0000';
 
+      }
+      if((isset($data['noCalendar']) && ! $data['noCalendar']) && (isset($data['enableTime']) && $data['enableTime'])){
+        $dateFormat .= ' ';
+        $maskFormat .= ' ';
       }
       if(isset($data['enableTime']) && $data['enableTime']){
         $dateFormat .= 'H:i';

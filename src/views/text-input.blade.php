@@ -18,10 +18,6 @@
   -- |  Usage: See Readme.md
   --}}
 
-@pushonce('scripts:mask')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js" integrity="sha256-u7MY6EG5ass8JhTuxBek18r5YG6pllB9zLqE4vZyTn4=" crossorigin="anonymous"></script>
-@endpushonce
-
 
 @php 
 //Set the data type
@@ -77,7 +73,8 @@ $showFormGroup = true;
 @if($type == 'text')
     {{ Form::text($id, $value, $attributes) }}
 @elseif($type == 'phone')
-	@php $attributes['data-mask'] = '(000) 000-0000' @endphp
+	@php $attributes['data-mask'] = '(000) 000-0000'; @endphp
+	@php $attributes['data-mask-type'] = 'phone'; @endphp
     {{ Form::text($id, $value, $attributes) }}
 @elseif($type == 'password')
     {{ Form::password($id, $attributes) }}
@@ -114,7 +111,28 @@ confirm_password.onkeyup = validatePassword;
 @endpush
 @endif
 
-
+@if($type == 'phone')
+@push('scriptsdocumentready'){{-- <script>--}}
+	$('#{{id}}').mask('(000) 000-0000');
+$.jMaskGlobals = {
+  maskElements: 'input,td,span,div',
+  dataMaskAttr: '*[data-mask]',
+  dataMask: true,
+  watchInterval: 300,
+  watchInputs: true,
+  watchDataMask: true
+  byPassKeys: [9, 16, 17, 18, 36, 37, 38, 39, 40, 91],
+  translation: {
+    '0': {pattern: /\d/},
+    '9': {pattern: /\d/, optional: true},
+    '#': {pattern: /\d/, recursive: true},
+    'A': {pattern: /[a-zA-Z0-9]/},
+    'S': {pattern: /[a-zA-Z]/}
+  }
+};
+});
+@endpush{{-- </script> --}}
+@endif
 
 
 

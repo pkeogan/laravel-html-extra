@@ -156,7 +156,7 @@ class HtmlExtra
   {
     $this->type = 'text-input';
     $this->data['type'] = 'text';
-	$this->data['attributes']['data-mask'] = "(###) ###-####";
+	$this->data['attributes']['data-mask'] = "(000) 000-0000";
     return $this;
   }
   

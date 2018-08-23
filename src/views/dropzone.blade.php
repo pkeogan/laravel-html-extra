@@ -53,7 +53,7 @@ $attributes['class'] = 'form-control';
 
 <div id="{{ $id }}_group" class="form-group @if($errors->getBag('default')->has($id))has-error @endif @if(isset($data['hidden']) && $data['hidden'])hidden @endif">
 	    {{ Form::label($id, $label, ['class' => 'control-label']) }}
-	{{ Form::file($id, ['id' => $id]) }}
+	{{ Form::file($id, $attributes) }}
     <p class="help-block">@if(isset($helper_text)){{ $helper_text }}@endif</p>
 </div>
 
