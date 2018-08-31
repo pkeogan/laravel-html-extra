@@ -32,7 +32,6 @@
     $attributes['id'] = $id;
     $attributes['data-input'] = 'data-input';
      if(!isset($attributes['autocomplete'])){ $attributes['autocomplete'] = 'off';}
-
       $dateFormat = '';
 	  $maskFormat = '';
       if(isset($data['noCalendar']) && ! $data['noCalendar']){
@@ -79,7 +78,7 @@ $(document).ready(function() {
 
 
 <div class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
-	<label for="{{ $id.'-label' }}" class="control-label">{{ $name }}@if(in_array('Required', $attributes)) *@endif</label>
+	<label for="{{ $id.'-label' }}" class="control-label">{{ $name }}@if(in_array('required', $attributes)) *@endif</label>
 	        <div class="input-group">
           
         {{ Form::text($id, $value, $attributes) }}

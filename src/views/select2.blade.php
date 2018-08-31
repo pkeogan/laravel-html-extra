@@ -81,9 +81,7 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
 <label for="{{ $id }}" class="control-label">{{ $label }} @if(isset($attributes['Required'])) * @endif</label>
     @php
   if(isset($attributes['multiple']) && $attributes['multiple'] == 'multiple'){{ unset($attributes['placeholder']); }}
- 
     @endphp
-
     {{ Form::select($formID, $value, $data['default'], array_merge(['id' => $id, 
                                                       'class' => 'select-2-'.$id.' form-control',
                                                       'name' => $formID, 

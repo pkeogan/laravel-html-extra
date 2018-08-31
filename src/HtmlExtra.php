@@ -205,6 +205,12 @@ class HtmlExtra
     $this->type = 'pdf';
     return $this;
   }
+	
+  public function bootstrapDatePicker()
+  {
+    $this->type = 'bootstrapDatePicker';
+    return $this;
+  }
   
   public function toggle()
   {
