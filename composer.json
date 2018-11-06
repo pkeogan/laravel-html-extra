@@ -1,6 +1,7 @@
 {
   "name": "pkeogan/laravel-html-extra",
   "description": "A Laravel 5.5 Package that expands LaravelCollective/html further with different js plugins.",
+  "version": "1.0",
   "keywords": [
     "laravel",
     "AdminLTE",
