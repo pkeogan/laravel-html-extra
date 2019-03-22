@@ -26,7 +26,7 @@
 
 
 @php 
-    if(isset($attributes['value'])){ $value = $attributes['value']; }else{ $value = null; } //if the value was passed, use it, if not null it
+    if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Enter '. $name;}    
     if($attributes == null){$attributes = [];} //if attributes is null, because it wasnts passed, setup so we can atleast add the class
     $attributes['class'] = 'form-control';
     $attributes['id'] = $id;
@@ -77,8 +77,8 @@ $(document).ready(function() {
 
 
 
-<div class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
-	<label for="{{ $id.'-label' }}" class="control-label">{{ $name }}@if(in_array('required', $attributes)) *@endif</label>
+<div class="form-group @if($errors->getBag('default')->has($id))has-error @endif @hideGroup" id="{{ $id }}Group">
+	<label for="{{ $id.'-label' }}" class="control-label">{{ $name }} @labelRequired </label>
 	        <div class="input-group">
           
         {{ Form::text($id, $value, $attributes) }}

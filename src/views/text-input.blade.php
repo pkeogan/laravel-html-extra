@@ -64,11 +64,11 @@ $showFormGroup = true;
 
 @endphp
 
-<div id="{{ $id }}_group" class="@if($showFormGroup) form-group @endif @if($errors->getBag('default')->has($id))has-error @endif @if(isset($data['hidden']) && $data['hidden'])hidden @endif">
+<div id="{{ $id }}Group" class="@if($showFormGroup) form-group @endif @if($errors->getBag('default')->has($id))has-error @endif @hideGroup()">
 
 	
 	@if($showLabel)
-		{{ Form::label($id, $label, ['class' => 'control-label']) }}
+		<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
 	@endif
 @if($type == 'text')
     {{ Form::text($id, $value, $attributes) }}

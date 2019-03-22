@@ -44,8 +44,8 @@ $attributes['class'] = 'form-control';
 
 
 @endphp
-<div id="{{ $id }}_group" class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
-    {{ Form::label($id, $label, ['class' => 'control-label']) }}
+<div id="{{ $id }}Group" class="form-group @if($errors->getBag('default')->has($id))has-error @endif @hideGroup()">
+    <label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
     {{ Form::text($id, $value, $attributes) }}
     <p class="help-block">@if(isset($helper_text)){{ $helper_text }}@endif</p>
 </div>

@@ -20,16 +20,6 @@
   --}} 
 
 
-@pushonce('afterstyles:select2')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.1/css/select2.min.css" integrity="sha256-MeSf8Rmg3b5qLFlijnpxk6l+IJkiR91//YGPCrCmogU=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous" />
-<style>.select2-selection__rendered{margin-top: 0px !important;}</style>
-@endpushonce
-
-@pushonce('scripts:select2')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.1/js/select2.min.js" integrity="sha256-190Fv8aJAduyyIOnvWVpjCmzkX1h8OEtGWbcoU1QVsA=" crossorigin="anonymous"></script>
-@endpushonce
-
 @php 
 //if incoming $data['report_model'] is true, then we need to pull set the $value within here
 if(isset($data['select_model']) && isset($data['select_model']))
@@ -51,17 +41,20 @@ if(isset($value) && !is_array($value) && (new \ReflectionClass($value))->getShor
 if(isset($attributes['multiple']) && $attributes['multiple'] == 'multiple'){$formID = $id.'[]'; }else{$formID = $id;}
 if(! isset($data['default'] )){ $data['default'] = null; }
 
-if(isset($attributes)){ if( in_array('required', $attributes) ){ $label = $name.' *'; }else{ $label = $name; } }else{ $label = $name; } //Set $label Var, if required was passed, add a * to the end of the label name
+if(isset($attributes)){ if( in_array('required', $attributes) ){ $label = $name.' '; }else{ $label = $name; } }else{ $label = $name; } //Set $label Var, if required was passed, add a * to the end of the label name
+if( !empty($attributes['placeholder']) && empty($attributes['multiple'])){
+array_unshift($value, "");
+}
 
 if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $name;}
 @endphp
 
   @push('scriptsdocumentready')    {{-- <script> --}}
-    
+
         $('.select-2-{{ $id }}').select2({
             @if(array_key_exists('allow-clear', $attributes))  allowClear:{{$attributes['allow-clear']}},@else allowClear:true, @endif
             @if(array_key_exists('tags', $attributes)) @if($attributes['tags'] == 'true') tags:true, @endif @endif
-            @if(array_key_exists('placeholder', $attributes)) @if($attributes['placeholder'] != null ) placeholder: "{{ $attributes['placeholder'] }}", @endif @endif
+            @if(!empty($attributes['placeholder'])) placeholder: "{{ $attributes['placeholder'] }}", @endif
             @if(array_key_exists('multiple', $attributes))@if(array_key_exists('maximumSelectionLength', $attributes)) @if($attributes['maximumSelectionLength'] != null ) maximumSelectionLength: "{{ $attributes['maximumSelectionLength'] }}", @endif @endif @endif
             theme: "bootstrap",
         });
@@ -77,8 +70,8 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
     {{-- </script> --}}
 @endpush
 
-<div id="{{ $id }}_group" id="{{ $id }}-group"class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
-<label for="{{ $id }}" class="control-label">{{ $label }} @if(isset($attributes['Required'])) * @endif</label>
+<div id="{{ $id }}Group" id="{{ $id }}Group"class="form-group  @hideGroup() @if($errors->getBag('default')->has($id))has-error @endif">
+<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
     @php
   if(isset($attributes['multiple']) && $attributes['multiple'] == 'multiple'){{ unset($attributes['placeholder']); }}
     @endphp
@@ -96,6 +89,8 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
   {{-- <script> --}}
     $('.select-2-{{ $id }}').on('select2:select', function (e) {
       @foreach($data['logic'] as $key=>$value)
+
+     
           if(e.params.data.id == '{{ $key }}'){
 			  $("#{{ $value }}").removeClass('hidden');
 			  $("#{{ $value }}").addClass('visible');
@@ -104,6 +99,78 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
 												  $("#{{ $value }}").removeClass('visible');
 											  }
       @endforeach
+		$('.hidden :input').prop('disabled', true);
+		$('.visible :input').prop('disabled', false);
+		
+    });
+  @endpush
+@endif
+
+
+@php $rgSet = isset($data['requiredGroups']);
+    $ogSet = isset($data['optionalGroups']);
+    @endphp
+@if($rgSet || $ogSet)
+  @push('scriptsdocumentready')
+
+    $('.select-2-{{ $id }}').on('select2:select', function (e) {
+      //hide all form inputs
+      var cid = $(this).attr('id');
+      console.log(cid + " was selected");
+      $(this).closest('form').find(':input').not(':input[type=button], :input[type=submit], :input[type=reset]').each(function( index ) {
+        //dont want to hide and disable this current elment
+        if($(this).attr('id') != cid){
+            $(this).prop('disabled', true);
+          $(this).prop('required', false);
+          $(this).closest('div .form-group').find('.form-input-required-label').remove();
+            $(this).closest('div .form-group').addClass('hidden'); 
+        }
+      });
+      console.log(e.params.data.id);
+      @if($rgSet)
+      @foreach($data['requiredGroups'] as $key=>$value)
+      if(e.params.data.id == '{{ $key }}'){
+        @if(is_array($value))
+          @foreach($value as $key2=>$val2)
+            $("#{{ $val2 }}Group").removeClass('hidden');
+            $("#{{ $val2 }}Group").addClass('visible');
+            $("#{{ $val2 }}").prop('disabled', false);
+            $("#{{ $val2 }}").prop('required', true);
+            $("#{{ $val2 }}Group label").append('<span class="form-input-required-label">(required)</span>');
+       
+        
+          @endforeach
+        @else
+            $("#{{ $value }}Group").removeClass('hidden');
+            $("#{{ $value }}Group").addClass('visible');
+            $("#{{ $value }}").prop('disabled', false);
+            $("#{{ $val2 }}").prop('required', true);
+            $("#{{ $val2 }}Group label").append('<span class="form-input-required-label">(required)</span>');
+
+        @endif
+      }
+      @endforeach
+        @endif
+          @if($ogSet)
+        @foreach($data['optionalGroups'] as $key=>$value)
+        if(e.params.data.id == '{{ $key }}'){
+        @if(is_array($value))
+          @foreach($value as $key2=>$val2)
+            $("#{{ $val2 }}Group").removeClass('hidden');
+            $("#{{ $val2 }}Group").addClass('visible');
+            $("#{{ $val2 }}").prop('disabled', false);
+            $("#{{ $val2 }}").prop('required', false);
+          @endforeach
+        @else
+            $("#{{ $value }}Group").removeClass('hidden');
+            $("#{{ $value }}Group").addClass('visible');
+            $("#{{ $value }}").prop('disabled', false);
+            $("#{{ $val2 }}").prop('required', false);
+        @endif
+        }
+      @endforeach
+          @endif
+      
 		$('.hidden :input').prop('disabled', true);
 		$('.visible :input').prop('disabled', false);
 		

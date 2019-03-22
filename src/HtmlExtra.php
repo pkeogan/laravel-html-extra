@@ -51,7 +51,8 @@ class HtmlExtra
       
       $this->types = ['box', 'label', 'text', 'password', 'email', 'hidden', 'textarea', 'date', 'time', 'dateTime', 'toggle', 'select', 'mulitple', 'slider', 'summernote', 'cropper']; 
       $this->singleAttributes = ['required', 'disabled', 'checked', 'autofocus', 'multiple', 'readonly'];
-    	  $this->booleanVars = ['removeLabel', 'inputOnly', 'removeFormGroup'];
+      $this->singleData = ['hideGroup'];
+    	$this->booleanVars = ['removeLabel', 'inputOnly', 'removeFormGroup'];
     }
 
   
@@ -122,6 +123,13 @@ class HtmlExtra
 				 $this->data['attributes'] =  [$value];
 			  } else {
 				  $this->data['attributes'] =  array_merge($this->data['attributes'], [$value]);
+			  }
+        } elseif(in_array($value, $this->singleData)){ //Single Attributes
+          
+			  if(is_null($this->data['data'])){
+				 $this->data['data'] =  [$value => true];
+			  } else {
+				  $this->data['data'] =  array_merge($this->data['data'], [$value => true]);
 			  }
         } elseif(in_array($value, $this->booleanVars)){ //Single Attributes
 				  $this->data[$value] = true;
@@ -324,6 +332,11 @@ public function time()
 		
 	}
   
+ public function hideGroup()
+	{
+		$this->data['hideGroup'] = true;
+	}
+  
   public function attributes(Array $input)
   {
     if(is_null($this->data['attributes'])){
@@ -352,9 +365,14 @@ public function time()
         if(! isset($this->data['id'])){ $this->data['id'] = str_replace(' ', '_', strtolower($this->data['name'])); }; //if the ID wasnt set, set it to the $this->name alpah-underscore lower case
   }
   
+  
+
+  
   public function render()
   {
         $this->compile();
+    //if a lastpass reject wasnt passed, then auto disble it on this input.
+         if(!isset($this->data['attributes']['data-lpignore'])){$this->data['attributes']['data-lpignore'] = "true";}
         $type = $this->type;
         $data = $this->data;
         $this->type = null;
@@ -415,6 +433,7 @@ public function dd()
           $this->view->make('htmlextra::' . $type, $data)->render()
         );
     }
+
   
   
 }
