@@ -24,6 +24,9 @@
 //if attributes is null, because it was not passed, setup so we can atleast add the class
 //if($attributes == null){$attributes = [];}
 
+//check if an id was set, if not, then set it to the id var
+if(empty($attributes['id'])){ $attributes['id'] = $id; } 
+
 //Set $label Var, if required was passed, add a * to the end of the label name
 if(isset($attributes['required'])){ $label = $name.' *'; }else{ $label = $name; } 
 

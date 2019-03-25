@@ -117,14 +117,21 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
       //hide all form inputs
       var cid = $(this).attr('id');
       console.log(cid + " was selected");
+            $(this).closest('form').find('.form-group').each(function( index ) {
+              if($(this).attr('id') != '{{$id}}Group') {
+             $(this).removeClass('visible');
+             $(this).addClass('hidden');
+            }
+      });
       $(this).closest('form').find(':input').not(':input[type=button], :input[type=submit], :input[type=reset]').each(function( index ) {
         //dont want to hide and disable this current elment
         if($(this).attr('id') != cid){
-            $(this).prop('disabled', true);
+          $(this).prop('required', true);
           $(this).prop('required', false);
           $(this).closest('div .form-group').find('.form-input-required-label').remove();
             $(this).closest('div .form-group').addClass('hidden'); 
         }
+        
       });
       console.log(e.params.data.id);
       @if($rgSet)
@@ -173,6 +180,8 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
       
 		$('.hidden :input').prop('disabled', true);
 		$('.visible :input').prop('disabled', false);
+     $('.hidden select').prop('disabled', true);
+		$('.visible select').prop('disabled', false);
 		
     });
   {{-- </script> --}}

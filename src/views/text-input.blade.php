@@ -26,6 +26,9 @@ if(isset($data['type'])){$type= $data['type'];}
 //Set $label Var to $name, if 'required' was passed, add a * to the end of the label name
 if(isset($attributes) && (in_array('required' ,$attributes) || in_array('Required' ,$attributes))){ $label = $name.' *'; }else{ $label = $name; } 
    
+if(empty($attributes['id'])){ $attributes['id'] = $id; } 
+
+
  //if the value was not passed,null it
 if(!isset($value)){ $value = null; }
 
