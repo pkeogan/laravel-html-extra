@@ -16,7 +16,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "laravelcollective/html":"^5.4.0"
+    "laravelcollective/html":"^7.24"
   },
   "autoload": {
     "psr-4": {
