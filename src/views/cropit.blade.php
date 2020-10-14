@@ -18,16 +18,16 @@
   -- |  Usage: See Readme.md
   --}}
 @pushonce('style:cropper')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.2.2/cropper.min.css" integrity="sha256-nlV017uzwfK+erVNsfhJfG4ufyRK9gQOpTZCZIbiHBU=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css" integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig==" crossorigin="anonymous" />
 @endpushonce
-@pushonce('scripts:cropper')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.2.2/cropper.js" integrity="sha256-QlmsK/cdKXsKjF680WvleMN1CNQaXaj9Hgh+5bogb6A=" crossorigin="anonymous"></script>
+@pushonce('afterscripts:cropper')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js" integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw==" crossorigin="anonymous"></script>
 @endpushonce
 
 
-@row
-      @col(3) @endcol
-  @col(6)
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
   <input type="hidden" id="image_data" name="image_data" value="">
 <div id="image_container" class="image_container hide-div" style="max-height: 300px;">
     <img id="blah" src="@if(isset($img)){{$img}}@endif" alt="Image Preview" />
@@ -37,9 +37,9 @@
   Browse ... <input type="file" name="image" id="image" onchange="readURL(this);"/>
 </label>
 
-  @endcol 
-     @col(3) @endcol
-  @endrow
+</div> 
+  <div class="col-md-3"></div>
+</div>
 
 
 

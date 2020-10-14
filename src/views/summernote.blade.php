@@ -18,10 +18,10 @@
   -- |  Usage: See Readme.md
   --}}
 @pushonce('styles:summernote')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote.css" integrity="sha256-3en7oGyoTD7A1GPFbWeqdIGvDlNWU5+4oWgJQE2dnQs=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" integrity="sha512-pDpLmYKym2pnF0DNYDKxRnOk1wkM9fISpSOjt8kWFKQeDmBTjSnBZhTd41tXwh8+bRMoSaFsRnznZUiH9i3pxA==" crossorigin="anonymous" />
 @endpushonce
 @pushonce('scripts:summernote')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote.js" integrity="sha256-9tvAQTHltclSRZubN4xerdlqLhVmxj/Z311rAkOzXd0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js" integrity="sha512-kZv5Zq4Cj/9aTpjyYFrt7CmyTUlvBday8NGjD9MxJyOY/f2UfRYluKsFzek26XWQaiAp7SZ0ekE7ooL9IYMM2A==" crossorigin="anonymous"></script>
 @endpushonce
 
 @php

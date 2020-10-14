@@ -19,7 +19,6 @@
   -- |  Usage: See Readme.md
   --}} 
 
-
 @php 
 //if incoming $data['report_model'] is true, then we need to pull set the $value within here
 if(isset($data['select_model']) && isset($data['select_model']))
@@ -47,6 +46,13 @@ array_unshift($value, "");
 }
 
 if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $name;}
+
+if(!isset($removeLabel)){
+$showLabel = true;
+} else {
+$showLabel = ! $removeLabel;
+}
+
 @endphp
 
   @push('scriptsdocumentready')    {{-- <script> --}}
@@ -56,7 +62,7 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
             @if(array_key_exists('tags', $attributes)) @if($attributes['tags'] == 'true') tags:true, @endif @endif
             @if(!empty($attributes['placeholder'])) placeholder: "{{ $attributes['placeholder'] }}", @endif
             @if(array_key_exists('multiple', $attributes))@if(array_key_exists('maximumSelectionLength', $attributes)) @if($attributes['maximumSelectionLength'] != null ) maximumSelectionLength: "{{ $attributes['maximumSelectionLength'] }}", @endif @endif @endif
-            theme: "bootstrap",
+            theme: "bootstrap4",
         });
         @if(isset($data['logic']))
         var selecteddata = $('.select-2-{{ $id }}').select2('data');
@@ -71,7 +77,9 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
 @endpush
 
 <div id="{{ $id }}Group" id="{{ $id }}Group"class="form-group  @hideGroup() @if($errors->getBag('default')->has($id))has-error @endif">
-<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
+  @if($showLabel)
+  <label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
+  @endif
     @php
   if(isset($attributes['multiple']) && $attributes['multiple'] == 'multiple'){{ unset($attributes['placeholder']); }}
     @endphp

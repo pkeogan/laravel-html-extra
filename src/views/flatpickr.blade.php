@@ -82,10 +82,10 @@ $(document).ready(function() {
 	        <div class="input-group">
           
         {{ Form::text($id, $value, $attributes) }}
-          <span class="input-group-btn">
-      <button id="{{$id}}-open" type="button" class="btn btn-default" data-toggle="tooltip" title="Open Calender"><span class="fa fa-calendar"></span></button>
-      <button id="{{$id}}-close" type="button" class="btn btn-default" data-toggle="tooltip" title="Clear Input"><span class="fa fa-times"></button>
-            </span>
+          <div class="input-group-append">
+      <button id="{{$id}}-open" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="Open Calender"><span class="fa fa-calendar"></span></button>
+      <button id="{{$id}}-close" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="Clear Input"><span class="fa fa-times"></button>
+      </div>
 
         </div>
     <p class="help-block">@if(isset($helper_text)){{ $helper_text }}@endif</p>

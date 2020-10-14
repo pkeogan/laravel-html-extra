@@ -67,11 +67,11 @@ $showFormGroup = true;
 
 @endphp
 
-<div id="{{ $id }}Group" class="@if($showFormGroup) form-group @endif @if($errors->getBag('default')->has($id))has-error @endif @hideGroup()">
+<fieldset id="{{ $id }}Group" class="@if($showFormGroup) form-group @endif @if($errors->getBag('default')->has($id))has-error @endif @hideGroup()">
 
 	
 	@if($showLabel)
-		<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
+		<label for="{{ $id }}">{{ $label }}  @labelRequired </label>
 	@endif
 @if($type == 'text')
     {{ Form::text($id, $value, $attributes) }}
@@ -91,10 +91,10 @@ $showFormGroup = true;
     {{ Form::hidden($id, $value, $attributes) }}
 @endif  
 	@if(isset($helper_text))
-	    <p class="help-block">{{ $helper_text }}</p>
+	    <span class="text-muted">{{ $helper_text }}</span>
 	@endif
 	
-</div>
+</fieldset>
 
 @if($type == 'passwordConfirm')
  @push('scriptsdocumentready')

@@ -200,11 +200,19 @@ class HtmlExtra
   {
     $this->type = 'text-input';
     $this->data['type'] = 'hidden';
+    $this->data['inputOnly'] = true;
+    
     return $this;
   }
   
   public function build()
   {
+    return $this;
+  }
+
+  public function cropit()
+  {
+    $this->type = 'cropit';
     return $this;
   }
 	
@@ -266,6 +274,19 @@ public function time()
     return $this;
   }
 
+  public function file()
+  {
+    $this->type = 'dropzone';
+    return $this;
+  }
+
+  public function files()
+  {
+    $this->type = 'dropzone';
+    $this->data['attributes'] = ['multiple' => 'multiple'];
+    return $this;
+  }
+
   public function mask(String $input)
   {
     $this->data['attributes']['data-mask'] = $input;
@@ -275,6 +296,12 @@ public function time()
   public function slider()
   {
     $this->type = 'slider';
+    return $this;
+  }
+
+  public function signature()
+  {
+    $this->type = 'signature';
     return $this;
   }
 	
@@ -306,6 +333,12 @@ public function time()
   public function name(String $input)
   {
     $this->data['name'] = $input;
+    return $this;
+  }
+
+  public function icon(String $input)
+  {
+    $this->data['icon'] = $input;
     return $this;
   }
   
