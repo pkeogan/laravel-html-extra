@@ -20,6 +20,10 @@
 
 namespace Pkeogan\LaravelHtmlExtra;
 
+use Illuminate\View\View;
+use Illuminate\View\Engines\CompilerEngine;
+
+
 
 use Illuminate\Support\HtmlString;
 use Illuminate\Contracts\View\Factory;
@@ -32,6 +36,9 @@ use App\Exceptions\GeneralException;
 class HtmlExtra
 {    
 
+    protected $javascript = false;
+    protected $html = false;
+  
     protected $type = null;
     protected $view;
     protected $data;
@@ -40,9 +47,11 @@ class HtmlExtra
     
   
     public function __construct (Factory $view) {
+      $this->factory = null;
       $this->view = $view;
       $this->type = null;
       $this->data = ['name' => null,
+                     'value' => null,
                     'id' => null,
                     'helper_text' => null,
                     'value' => null,
@@ -164,7 +173,7 @@ class HtmlExtra
   {
     $this->type = 'text-input';
     $this->data['type'] = 'text';
-	$this->data['attributes']['data-mask'] = "(000) 000-0000";
+	  $this->data['attributes']['data-mask'] = "(000) 000-0000";
     return $this;
   }
   
@@ -208,7 +217,7 @@ class HtmlExtra
     return $this;
   }
 	
-	  public function pdf()
+	 public function pdf()
   {
     $this->type = 'pdf';
     return $this;
@@ -223,6 +232,18 @@ class HtmlExtra
   public function toggle()
   {
     $this->type = 'toggle';
+    return $this;
+  }
+  
+  public function radio()
+  {
+    $this->type = 'radio';
+    return $this;
+  }
+  
+  public function clock()
+  {
+    $this->type = 'clock';
     return $this;
   }
 	
@@ -366,6 +387,61 @@ public function time()
   }
   
   
+  
+  public function renderFromJSON($config)
+  {
+    if(empty($config['type'])){
+      throw new GeneralException('HtmlExtra Error: no type set in config.');
+    }
+    if(empty($config['name'])){
+      throw new GeneralException('HtmlExtra Error: no name set in config.');
+    }
+    if(empty($config['id']) && empty($config['name'])){
+      throw new GeneralException('HtmlExtra Error: no id set in config.');
+    }
+    if( ! in_array($config['type'], $this->types) ){
+      throw new GeneralException('HtmlExtra Error: type was given is not valid.');
+    }
+
+      $this->{$config['type']}(); 
+      unset($config['type']);
+    
+    foreach($config as $method => $value){
+      if(is_numeric($method)){
+        $this->{$value};
+      } else {
+        $this->{$method}($value);
+      }
+      
+    }
+    
+        $this->compile();
+        $type = $this->type;
+        $data = $this->data;
+        $this->type = null;
+      //reset for next render call.
+        $this->data = ['name' => null,
+                    'id' => null,
+                    'helper_text' => null,
+                    'value' => null,
+                    'attributes' => null,
+                    'data' => null];
+    
+    
+   $view = $this->view->make('htmlextra::' . $type, $data);
+   $this->html =   $view->render(function($f, $b){
+     $this->javascript = $f->getFactory()->yieldPushContent('scriptsdocumentready');
+    });
+    
+    $html = $this->html;
+    $javascript = $this->javascript;
+    
+    $this->html = false;
+    $this->javascript = false;
+
+   return ['html' => $html, 'javascript' => $javascript];
+
+  }
 
   
   public function render()
@@ -400,7 +476,6 @@ public function dd()
                     'value' => null,
                     'attributes' => null,
                     'data' => null];
-    
 		dd($data);
   }
   
@@ -417,6 +492,8 @@ public function dd()
         return new HtmlString($html);
     }
   
+  
+  
     /**
      * Render Component
      *
@@ -427,7 +504,6 @@ public function dd()
      */
     protected function renderComponent($type, $data)
     {
-
 
         return new HtmlString(
           $this->view->make('htmlextra::' . $type, $data)->render()

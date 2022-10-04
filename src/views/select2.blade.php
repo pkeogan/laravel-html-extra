@@ -70,8 +70,8 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
     {{-- </script> --}}
 @endpush
 
-<div id="{{ $id }}Group" id="{{ $id }}Group"class="form-group  @hideGroup() @if($errors->getBag('default')->has($id))has-error @endif">
-<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>
+<div id="{{ $id }}Group" id="{{ $id }}Group"class="@if(!isset($data['hideFormGroup'])) form-group @endif  @hideGroup() @if($errors->getBag('default')->has($id))has-error @endif">
+@if(!isset($data['hideLabel']))<label for="{{ $id }}" class="control-label">{{ $label }}  @labelRequired() </label>@endif
     @php
   if(isset($attributes['multiple']) && $attributes['multiple'] == 'multiple'){{ unset($attributes['placeholder']); }}
     @endphp
@@ -143,7 +143,7 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
             $("#{{ $val2 }}Group").addClass('visible');
             $("#{{ $val2 }}").prop('disabled', false);
             $("#{{ $val2 }}").prop('required', true);
-            $("#{{ $val2 }}Group label").append('<span class="form-input-required-label">(required)</span>');
+            $("#{{ $val2 }}Group label:first").append('<span class="form-input-required-label">(required)</span>');
        
         
           @endforeach
@@ -152,7 +152,7 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
             $("#{{ $value }}Group").addClass('visible');
             $("#{{ $value }}").prop('disabled', false);
             $("#{{ $val2 }}").prop('required', true);
-            $("#{{ $val2 }}Group label").append('<span class="form-input-required-label">(required)</span>');
+            $("#{{ $val2 }}Group label:first").append('<span class="form-input-required-label">(required)</span>');
 
         @endif
       }

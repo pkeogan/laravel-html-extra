@@ -17,24 +17,26 @@
   -- |
   -- |  Usage: See Readme.md
   --}} 
-
-@pushonce('styles:slider')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.css" integrity="sha256-YuvPeY5+RJF4aGha0ONgpI5Y9kYVWuobgWIf9wx13qY=" crossorigin="anonymous" />
-@endpushonce
-@pushonce('scripts:slider')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.0.3/nouislider.min.js" integrity="sha256-oj880/QiddQHkKfC9iOmsu+Hu5V4KCHfS3RY3RaZdZc=" crossorigin="anonymous"></script>
-@endpushonce
-
 @php
 if(!is_null(old($id)))
 {
 	$value = old($id);
 }
+
+if(!isset($data['step'])){
+$data['step'] = 1;
+}
+if(!isset($data['max'])){
+$data['max'] = 10;
+}
+if(!isset($data['min'])){
+$data['min'] = 0;
+}
 @endphp
 
-<div class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
+<div id="{{$id}}Group"  class="form-group @if($errors->getBag('default')->has($id))has-error @endif">
     {{ Form::label($id, $name, ['class' => 'control-label']) }}
-    <div class=" col-lg-12 col-centered"  style="    height: 34px; margin-top: 5px;">
+    <div class=" col-lg-12 col-centered"  style="height: 34px; padding-bottom: 50px;padding-top: 50px; margin-bottom:25px">
 
 				<div id="{{$id}}-slider"></div>
 				 {{ Form::hidden($id, $value, ['id' => $id]) }}
@@ -46,29 +48,140 @@ if(!is_null(old($id)))
   @push('after-scripts')
 <script type="text/javascript">
 $(document).ready(function() {
-		
-   var rangeSlider{{ $id }} = document.getElementById('{{ $id }}-slider');
-
-noUiSlider.create(rangeSlider{{ $id }}, {
-	start: [ @if($value == null) {{ $data['max'] / 2 }} @else {{ $value }} @endif ],
+  
+  console.log('start:{{$value}}');
+  
+   window.rangeSlider{{ $id }} = document.getElementById('{{ $id }}-slider');
+noUiSlider.create(window.rangeSlider{{ $id }}, {
+	start: [@if($value == null) {{ $data['max'] / 2 }} @else {{ $value }} @endif],
 		tooltips: [true],
+      connect: "lower",
+        @if(isset($data['ana']) && $data['ana'] == true)
+      format: {
+        to: function (value) {
+          if(value == @if(isset($data['notrated'])) 0 @else -1 @endif){
+            return 'Not Answered';
+          }
+          {{--
+          @if(isset($data['setpip1']))
+          if(value == 1){
+                      return '{{ $data['setpip1'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip2']))
+          if(value == 2){
+                      return '{{ $data['setpip2'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip3']))
+          if(value == 3){
+                      return '{{ $data['setpip3'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip4']))
+          if(value == 4){
+                      return '{{ $data['setpip4'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip5']))
+          if(value == 5){
+                      return '{{ $data['setpip5'] }}';
+                    }
+          @endif
+          --}}
+          return Math.round(value);
+
+           
+        },
+        from: function (value) {
+          if(value == null)
+            {
+              return @if(isset($data['notrated'])) 0 @else -1 @endif;
+            } else {
+            return Math.round(value);
+            }
+        }
+    },
+      @else
+        format: {
+        to: function (value) {
+            return value;     
+        },
+        from: function (value) {
+            return value;
+        }
+    },
+  @endif
+      
 	step: {{ $data['step'] }},
 	range: {
 		'min': [  {{ $data['min'] }} ],
 		'max': [ {{ $data['max'] }} ]
 	},
+    
+    	@if(isset($data['pipsvalue']))
+	pips: {
+		mode: 'values',
+    values: {!! $data['pipsvalue'] !!},
+    format: {
+        to: function (value) {
+          @if(isset($data['notrated']))
+          if(value == 0){
+              return '';
+            }
+          @else
+            if(value == -1){
+              return '';
+            }
+          @endif
+          @if(isset($data['setpip1']))
+          if(value == 1){
+                      return '{{ $data['setpip1'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip2']))
+          if(value == 2){
+                      return '{{ $data['setpip2'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip3']))
+          if(value == 3){
+                      return '{{ $data['setpip3'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip4']))
+          if(value == 4){
+                      return '{{ $data['setpip4'] }}';
+                    }
+          @endif
+          @if(isset($data['setpip5']))
+          if(value == 5){
+                      return '{{ $data['setpip5'] }}';
+                    }
+          @endif
+          return value;
+        },
+        from: function (value) {
+            return value;
+        }
+    }
+   },
+	@endif
 	@if(isset($data['pips']))
 	pips: {
 		mode: 'range',
 		density: {{ $data['pips'] }}
 	}
 	@endif
-});
+})@if(isset($data['default'])).set($data['default'])@endif;
 		var inputFormat = document.getElementById('{{$id}}');
 
-rangeSlider{{ $id }}.noUiSlider.on('update', function( values, handle ) {
+window.rangeSlider{{ $id }}.noUiSlider.on('update', function( values, handle ) {
 	inputFormat.value = values[handle];
 });
+    
+
+    
 	
 });
 </script>

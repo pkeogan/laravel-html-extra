@@ -17,12 +17,7 @@
   -- |
   -- |  Usage: See Readme.md
   --}}
-@pushonce('afterstyles:toggle')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
-@endpushonce
-@pushonce('scripts:toggle')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-@endpushonce
+
 
 @php if(isset($attributes['required']) && (in_array('required' ,$attributes) || in_array('Required' ,$attributes))){ $name = $name.' *'; } @endphp
 
@@ -62,17 +57,31 @@ $( document ).ready(function() {
                   }
             })
        })
-})
-</script>
-@endpush
-
-
-@if(isset($data['show-id-if-toggled']) || isset($data['disable_select_if_toggled']) || isset($data['enable_select_if_toggled']) ||isset($data['disable-id-if-toggled']) || isset($data['enable-id-if-toggled']) || isset($data['hide-id-if-toggled']))
-@push('after-scripts') 
-<script type="text/javascript">
-      $( document ).ready(function() {
-              $(function() {
-                    $('#toggle-{{ $id }}').change(function() {
+                      $('#toggle-{{ $id }}').change(function() {
+                                @if(isset($data['config']))
+                      @php $config= json_encode( $data['config']); @endphp
+                                  var config = JSON.parse('{!! $config !!}');
+                                  if($(this).prop('checked')){
+                                    $.each(config, function( id, settings ) {
+                                        $.each(settings, function( index, setting) {
+                                           if(setting == 'toggled-required'){ $('#'+id).requireInput(); }
+                                           if(setting == 'toggled-disabled'){ $('#'+id).attr('disabled', true); }
+                                           if(setting == 'untoggled-required'){ $('#'+id).unrequireInput(); }
+                                           if(setting == 'untoggled-disabled'){ $('#'+id).removeAttr('disabled'); }
+                                        });
+                                      });
+                                  } else {
+                                    $.each(config, function( id, settings ) {
+                                       $.each(settings, function( index, setting) {
+                                          if(setting == 'toggled-required'){ $('#'+id).unrequireInput(); }
+                                          if(setting == 'toggled-disabled'){ $('#'+id).removeAttr('disabled'); }
+                                          if(setting == 'untoggled-required'){ $('#'+id).requireInput(); }
+                                          if(setting == 'untoggled-disabled'){ $('#'+id).attr('disabled', true); }
+                                        });
+                                      });
+                                  }
+                               @endif
+                      
                         @if(isset($data['show-id-if-toggled']))
                             @if($data['show-id-if-toggled'] != null)
                                   if($(this).prop('checked')){
@@ -123,7 +132,20 @@ $( document ).ready(function() {
                               @if($data['disable-id-if-toggled'] != null)
                                     if($(this).prop('checked')){
                                           @foreach($data['disable-id-if-toggled'] as $disable)
-                                               $('#{{ 'toggle-'.$disable }}').bootstrapToggle('off')
+                                               if($('#{{ 'toggle-'.$disable }}').attr('type') != 'checkbox'){
+                                                  $('#{{ $disable }}').attr('disabled', true);
+                                               } else {
+                                                 $('#{{ 'toggle-'.$disable }}').bootstrapToggle('off')
+                                               }
+                                               
+                                          @endforeach
+                                    } else {
+                                            @foreach($data['disable-id-if-toggled'] as $enable)
+                                              if($('#{{ 'toggle-'.$enable }}').attr('type') != 'checkbox'){
+                                                  $('#{{ $enable }}').removeAttr('disabled');
+                                               } else {
+                                                 $('#{{ 'toggle-'.$enable }}').bootstrapToggle('on')
+                                               }
                                           @endforeach
                                     }
                               @endif 
@@ -132,14 +154,25 @@ $( document ).ready(function() {
                               @if($data['enable-id-if-toggled'] != null)
                                     if($(this).prop('checked')){
                                           @foreach($data['enable-id-if-toggled'] as $enable)
-                                               $('#{{ 'toggle-'.$enable }}').bootstrapToggle('on')
+                                              if($('#{{ 'toggle-'.$enable }}').attr('type') != 'checkbox'){
+                                                  $('#{{ $enable }}').removeAttr('disabled');
+                                               } else {
+                                                 $('#{{ 'toggle-'.$enable }}').bootstrapToggle('on')
+                                               }
+                                          @endforeach
+                                    } else {
+                                          @foreach($data['enable-id-if-toggled'] as $disable)
+                                               if($('#{{ 'toggle-'.$disable }}').attr('type') != 'checkbox'){
+                                                  $('#{{ $disable }}').attr('disabled', true);
+                                               } else {
+                                                 $('#{{ 'toggle-'.$disable }}').bootstrapToggle('off')
+                                               }
+                                               
                                           @endforeach
                                     }
                               @endif 
                           @endif
-                    })
-              })
-      })
+                    });
+})
 </script>
 @endpush
-@endif

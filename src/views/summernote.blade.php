@@ -28,12 +28,12 @@
 if(!isset($data)){
 $data = config('laravel-html-extra.summernote');
 } else {
-$data = array_merge($data, config('laravel-html-extra.summernote'));
+$data = array_merge(config('laravel-html-extra.summernote'), $data);
 }
 @endphp
 
 
-<div class="form-group">
+<div class="form-group @if($errors->getBag('default')->has($id))has-error @endif" id="{{$id}}Group">
 <label>{{ $name }}</label>
 {{ Form::textarea($id,
                   $value,

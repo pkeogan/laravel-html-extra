@@ -54,9 +54,11 @@
 
       }
 		$data['time_24hr'] = true;
+    $data['disableMobile'] = true;
 		if(!isset($data['allowInput'])){$data['allowInput'] = true ;}
 		$data['dateFormat'] = $dateFormat;
 		$attributes['data-mask'] = $maskFormat;
+    $attributes['disableMobile'] = 'true';
 @endphp
 
 @push('after-scripts')    
@@ -70,6 +72,7 @@ $(document).ready(function() {
   });
   $("#{{$id}}-close").click(function() {
     calendar{{$id}}.clear();
+    $('#{{$id}}').val('');
   });
 });
 </script>

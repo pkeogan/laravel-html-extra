@@ -22,7 +22,7 @@
 
 
 @pushonce('scripts:pwstrength')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/2.2.1/pwstrength-bootstrap.min.js" integrity="sha256-URY2fVWqG7dzwG1Y2nFh/l5cpiI91+jV+hE6vphr2xs=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/3.0.4/pwstrength-bootstrap.min.js" integrity="sha256-d2Fguy9Os3DfZDl0HZWt/uCx4M1QpztOnhwEKeMURUI=" crossorigin="anonymous"></script>
 @endpushonce
 
 @php 
@@ -63,7 +63,12 @@ $attributes['class'] = 'form-control';
  @push('scriptsdocumentready')
 	$('#{{ $id }}').pwstrength({
 	common: { minChar:6, usernameField: "email"},
-	ui: {showStatus: true, showErrors: true, showVerdictsInsideProgressBar:true,}
+	ui: {showStatus: true, showErrors: true, showVerdictsInsideProgressBar:true,},
+    common: {
+        onKeyUp: function (evt, data) {
+            $('#{{ $id }}').attr('current-score', Math.round(data.score));
+        }
+    }
 });
 @endpush
 
