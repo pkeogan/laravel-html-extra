@@ -57,7 +57,16 @@ if(!isset($attributes['placeholder'])){$attributes['placeholder'] = 'Select '. $
             @if(!empty($attributes['placeholder'])) placeholder: "{{ $attributes['placeholder'] }}", @endif
             @if(array_key_exists('multiple', $attributes))@if(array_key_exists('maximumSelectionLength', $attributes)) @if($attributes['maximumSelectionLength'] != null ) maximumSelectionLength: "{{ $attributes['maximumSelectionLength'] }}", @endif @endif @endif
             theme: "bootstrap",
+            closeOnSelect: false,
         });
+
+          $('.select-2-{{ $id }}').on("change", function (e) {
+  $('.select2-search__field').val('');
+          }
+        );
+
+
+
         @if(isset($data['logic']))
         var selecteddata = $('.select-2-{{ $id }}').select2('data');
         selecteddata.forEach(function(entry) {
